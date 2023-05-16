@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    public float panSpeed = 20f;
-    public float zoomSpeed = 20f;
+    public float panSpeed = 5f;
+    public float zoomSpeed = 5f;
     public float zoomMin = 10f;
     public float zoomMax = 60f;
     private float currentZoom = 40f;
