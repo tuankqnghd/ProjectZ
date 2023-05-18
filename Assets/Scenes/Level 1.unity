@@ -148,7 +148,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 164451047}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 122.5, y: 8.9, z: 26.1}
+  m_LocalPosition: {x: 100, y: 100, z: -25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -168,10 +168,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7513a23bd35cc394f836d53599e4a1c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panSpeed: 20
-  zoomSpeed: 20
+  panSpeed: 5
+  zoomSpeed: 5
   zoomMin: 10
   zoomMax: 60
+  minBounds: {x: -50, y: -50, z: -50}
+  maxBounds: {x: 50, y: 0, z: 50}
 --- !u!1 &268059794
 GameObject:
   m_ObjectHideFlags: 0
@@ -395,7 +397,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 200
-  field of view: 20
+  field of view: 15
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -421,7 +423,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1650388158}
   m_LocalRotation: {x: 0.38268343, y: 0, z: 0, w: 0.92387956}
-  m_LocalPosition: {x: -25.2, y: 50.5, z: 17}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
