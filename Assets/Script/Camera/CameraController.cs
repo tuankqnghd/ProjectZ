@@ -10,14 +10,13 @@ public class CameraController : MonoBehaviour
     public float zoomMin = 10f;
     public float zoomMax = 60f;
     private float currentZoom = 40f;
-    public Vector3 minBounds = new Vector3(-50, -30, -50);
-    public Vector3 maxBounds = new Vector3(50, 0, 50);
-
+    public Vector3 minBounds = new Vector3(-50, -20, 0);
+    public Vector3 maxBounds = new Vector3(50, 50, 100);
     private Vector2 lastPanPosition;
     private Vector3 targetPosition;
     private Vector3 velocity = Vector3.zero;
     private Vector3 smoothDampVelocity = Vector3.zero;
-    private float smoothDampTime = 0.2f;
+    private float smoothDampTime = 0.3f;
     private Vector3 initialPosition; // Declare initialPosition here
 
     private bool doubleTapZoomIn = false;
@@ -57,38 +56,41 @@ public class CameraController : MonoBehaviour
             Vector3 cameraPosition = Camera.main.transform.position;
             cameraPosition.y += deltaMagnitude * zoomSpeed * Time.deltaTime;
             cameraPosition.z -= deltaMagnitude * zoomSpeed * Time.deltaTime;
+            
+            cameraPosition = ClampPosition(cameraPosition, initialPosition, minBounds, maxBounds);
             Camera.main.transform.position = cameraPosition;
         }
 
-        // Double-tap zoom in/out
-        if (Input.touchCount == 1 && Input.GetTouch(0).tapCount == 2)
-        {
-            if (!doubleTapZoomIn)
-            {
-                // Zoom in
-                Vector3 cameraPosition = Camera.main.transform.position;
-                cameraPosition.y -= 50f;
-                cameraPosition.z += 50f;
-                Camera.main.transform.position = cameraPosition;
-                doubleTapZoomIn = true;
-            }
-            else
-            {
-                // Zoom out
-                Vector3 cameraPosition = Camera.main.transform.position;
-                cameraPosition.y += 50f;
-                cameraPosition.z -= 50f;
-                Camera.main.transform.position = cameraPosition;
-                doubleTapZoomIn = false;
-            }
-        }
+        // // Double-tap zoom in/out
+        // if (Input.touchCount == 1 && Input.GetTouch(0).tapCount == 2)
+        // {
+        //     if (!doubleTapZoomIn)
+        //     {
+        //         // Zoom in
+        //         doubleTapZoomIn = true;
+        //         Vector3 cameraPosition = Camera.main.transform.position;
+        //         cameraPosition.z =  cameraPosition.z - (100f - cameraPosition.y);
+        //         cameraPosition.y = 100f;
+                
+        //         Camera.main.transform.position = cameraPosition;
+        //     }
+        //     else
+        //     {
+        //         // Zoom out
+        //         doubleTapZoomIn = false;
+        //         Vector3 cameraPosition = Camera.main.transform.position;
+        //         cameraPosition.z =  cameraPosition.z + (cameraPosition.y - 30f);
+        //         cameraPosition.y = 30f;
+        //         Camera.main.transform.position = cameraPosition;
+        //     }
+        // }
 
         // Clamp the target position within the specified bounds
         targetPosition = ClampPosition(targetPosition, initialPosition, minBounds, maxBounds);
 
         // Smoothly move the camera towards the target position
         // Use Vector3.SmoothDamp for smoother movement
-        transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref smoothDampVelocity, smoothDampTime);
+        transform.position = Vector3.SmoothDamp(transform.position,  targetPosition, ref smoothDampVelocity, smoothDampTime);
 
         
     }
