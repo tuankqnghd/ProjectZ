@@ -56,7 +56,7 @@ public class CameraController : MonoBehaviour
             Vector3 cameraPosition = Camera.main.transform.position;
             cameraPosition.y += deltaMagnitude * zoomSpeed * Time.deltaTime;
             cameraPosition.z -= deltaMagnitude * zoomSpeed * Time.deltaTime;
-            
+
             cameraPosition = ClampPosition(cameraPosition, initialPosition, minBounds, maxBounds);
             Camera.main.transform.position = cameraPosition;
         }
@@ -71,7 +71,7 @@ public class CameraController : MonoBehaviour
         //         Vector3 cameraPosition = Camera.main.transform.position;
         //         cameraPosition.z =  cameraPosition.z - (100f - cameraPosition.y);
         //         cameraPosition.y = 100f;
-                
+
         //         Camera.main.transform.position = cameraPosition;
         //     }
         //     else
@@ -92,7 +92,7 @@ public class CameraController : MonoBehaviour
         // Use Vector3.SmoothDamp for smoother movement
         transform.position = Vector3.SmoothDamp(transform.position,  targetPosition, ref smoothDampVelocity, smoothDampTime);
 
-        
+
     }
 
     private Vector3 ClampPosition(Vector3 position, Vector3 referencePos, Vector3 min, Vector3 max)
