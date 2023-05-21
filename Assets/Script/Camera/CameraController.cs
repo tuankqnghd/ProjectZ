@@ -6,12 +6,12 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     public float panSpeed = 5f;
-    public float zoomSpeed = 5f;
-    public float zoomMin = 10f;
-    public float zoomMax = 60f;
+    public float zoomSpeed = 20f;
     private float currentZoom = 40f;
-    public Vector3 minBounds = new Vector3(-50, -20, 0);
-    public Vector3 maxBounds = new Vector3(50, 50, 100);
+    public Vector3 minBounds = new Vector3(-75f, -20f, -25f);
+    public Vector3 maxBounds = new Vector3(75f, 50f, 125f);
+    public Vector3 minBounds_origin = new Vector3(-75f, -20f, -25f);
+    public Vector3 maxBounds_origin = new Vector3(75f, 50f, 125f);
     private Vector2 lastPanPosition;
     private Vector3 targetPosition;
     private Vector3 velocity = Vector3.zero;
@@ -53,46 +53,36 @@ public class CameraController : MonoBehaviour
             float deltaMagnitude = prevMagnitude - currentMagnitude;
 
             // Adjust the zoom by modifying Y and Z axes
-            Vector3 cameraPosition = Camera.main.transform.position;
-            cameraPosition.y += deltaMagnitude * zoomSpeed * Time.deltaTime;
-            cameraPosition.z -= deltaMagnitude * zoomSpeed * Time.deltaTime;
+            targetPosition = Camera.main.transform.position;
+            targetPosition.y += deltaMagnitude * zoomSpeed * Time.deltaTime;
+            targetPosition.z -= deltaMagnitude * zoomSpeed * Time.deltaTime;
 
-            cameraPosition = ClampPosition(cameraPosition, initialPosition, minBounds, maxBounds);
-            Camera.main.transform.position = cameraPosition;
+            if (targetPosition.y > maxBounds_origin.y){
+                targetPosition = new Vector3(targetPosition.x, maxBounds_origin.y, targetPosition.z + (targetPosition.y -  maxBounds_origin.y));
+            }
+            else if (targetPosition.y < minBounds_origin.y){
+                targetPosition = new Vector3(targetPosition.x, minBounds_origin.y, targetPosition.z - (minBounds_origin.y - targetPosition.y));
+            }
+
+            float zoomLevel = (maxBounds_origin.y - targetPosition.y)/(maxBounds_origin.y - minBounds_origin.y)/2f;
+
+            minBounds = new Vector3(minBounds_origin.x - zoomLevel*(maxBounds_origin.x - minBounds_origin.x),minBounds.y, minBounds_origin.z + zoomLevel*(maxBounds_origin.z - minBounds_origin.z)*0.747f);
+            maxBounds = new Vector3(maxBounds_origin.x + zoomLevel*(maxBounds_origin.x - minBounds_origin.x),maxBounds.y, maxBounds_origin.z + zoomLevel*(maxBounds_origin.z - minBounds_origin.z)*1.131f);
+        
+            Debug.Log(minBounds.z);
         }
+            // Debug.Log(minBounds);
+            // Debug.Log(maxBounds);
 
-        // // Double-tap zoom in/out
-        // if (Input.touchCount == 1 && Input.GetTouch(0).tapCount == 2)
-        // {
-        //     if (!doubleTapZoomIn)
-        //     {
-        //         // Zoom in
-        //         doubleTapZoomIn = true;
-        //         Vector3 cameraPosition = Camera.main.transform.position;
-        //         cameraPosition.z =  cameraPosition.z - (100f - cameraPosition.y);
-        //         cameraPosition.y = 100f;
+            // targetPosition = ClampPosition(cameraPosition, initialPosition, minBounds, maxBounds);
+            // cameraPosition = ClampPosition(cameraPosition, initialPosition, minBounds, maxBounds);
+            // Camera.main.transform.position = cameraPosition;
 
-        //         Camera.main.transform.position = cameraPosition;
-        //     }
-        //     else
-        //     {
-        //         // Zoom out
-        //         doubleTapZoomIn = false;
-        //         Vector3 cameraPosition = Camera.main.transform.position;
-        //         cameraPosition.z =  cameraPosition.z + (cameraPosition.y - 30f);
-        //         cameraPosition.y = 30f;
-        //         Camera.main.transform.position = cameraPosition;
-        //     }
-        // }
-
-        // Clamp the target position within the specified bounds
-        targetPosition = ClampPosition(targetPosition, initialPosition, minBounds, maxBounds);
-
-        // Smoothly move the camera towards the target position
-        // Use Vector3.SmoothDamp for smoother movement
-        transform.position = Vector3.SmoothDamp(transform.position,  targetPosition, ref smoothDampVelocity, smoothDampTime);
-
-
+            // Clamp the target position within the specified bounds
+            targetPosition = ClampPosition(targetPosition, initialPosition, minBounds, maxBounds);
+            // Smoothly move the camera towards the target position
+            // Use Vector3.SmoothDamp for smoother movement
+            transform.position = Vector3.SmoothDamp(transform.position,  targetPosition, ref smoothDampVelocity, smoothDampTime);
     }
 
     private Vector3 ClampPosition(Vector3 position, Vector3 referencePos, Vector3 min, Vector3 max)
