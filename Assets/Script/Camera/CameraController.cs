@@ -7,7 +7,6 @@ public class CameraController : MonoBehaviour
 {
     public float panSpeed = 5f;
     public float zoomSpeed = 20f;
-    private float currentZoom = 40f;
     public Vector3 minBounds = new Vector3(-75f, -20f, -25f);
     public Vector3 maxBounds = new Vector3(75f, 50f, 125f);
     public Vector3 minBounds_origin = new Vector3(-75f, -20f, -25f);
@@ -18,8 +17,6 @@ public class CameraController : MonoBehaviour
     private Vector3 smoothDampVelocity = Vector3.zero;
     private float smoothDampTime = 0.3f;
     private Vector3 initialPosition; // Declare initialPosition here
-
-    private bool doubleTapZoomIn = false;
 
     private void Start()
     {
@@ -68,8 +65,6 @@ public class CameraController : MonoBehaviour
 
             minBounds = new Vector3(minBounds_origin.x - zoomLevel*(maxBounds_origin.x - minBounds_origin.x),minBounds.y, minBounds_origin.z + zoomLevel*(maxBounds_origin.z - minBounds_origin.z)*0.747f);
             maxBounds = new Vector3(maxBounds_origin.x + zoomLevel*(maxBounds_origin.x - minBounds_origin.x),maxBounds.y, maxBounds_origin.z + zoomLevel*(maxBounds_origin.z - minBounds_origin.z)*1.131f);
-        
-            Debug.Log(minBounds.z);
         }
             // Debug.Log(minBounds);
             // Debug.Log(maxBounds);
