@@ -5,21 +5,26 @@ using UnityEngine.AI;
 
 public class Main_Character_Unit : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
     private NavMeshAgent navMeshAgent;
+    private GameObject selectedVisualGameObject;
+    private bool isSelected;
 
-    private void Awake() {
+    private void Awake()
+    {
         navMeshAgent = GetComponent<NavMeshAgent>();
+
+        selectedVisualGameObject = transform.Find("Selected").gameObject;
+        SetSelected(false);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SetDestination(Vector3 destinationPosition)
     {
-        navMeshAgent.SetDestination(Touch3D.GetTouchWorldPosition());
+        navMeshAgent.SetDestination(destinationPosition);
+    }
+
+    public void SetSelected(bool isSelected)
+    {
+        this.isSelected = isSelected;
+        selectedVisualGameObject.SetActive(isSelected);
     }
 }
